@@ -3,3 +3,8 @@
 ################################################################################
 
 /ImageLibBenchmarks.sln.DotSettings.user
+/SkiaSharp/obj
+/SkiaSharp/bin/Release
+/ImageSharp/bin/Release
+/ImageSharp/obj
+/packages
