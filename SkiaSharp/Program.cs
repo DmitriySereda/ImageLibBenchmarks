@@ -52,22 +52,13 @@ namespace SkiaSharp
 
                         Console.WriteLine($"Flush {watch.ElapsedMilliseconds}");
 
+						Console.WriteLine($"Before getPixels {watch.ElapsedMilliseconds}");
 
-                        using (SKImage img = SKImage.FromBitmap(toBitmap))
-                        {
-                            Console.WriteLine($"Encode before {watch.ElapsedMilliseconds}");
-                            using (SKData data = img.Encode())
-                            {
-                                Console.WriteLine($"Encode after {watch.ElapsedMilliseconds}");
-                                using (Stream outputStream = new MemoryStream())
-                                {
-                                    data.AsStream().CopyTo(outputStream);
-                                    Console.WriteLine($"Save to MemoryStream {watch.ElapsedMilliseconds}");
-                                }
+						byte[] pixelLocation = toBitmap.Bytes;
 
-                            }
-                        }
-                    }
+						File.WriteAllBytes(@"../../../image.bytes", pixelLocation);
+						Console.WriteLine($"after write {watch.ElapsedMilliseconds}");
+					}
                 }
 
                 watch.Stop();
