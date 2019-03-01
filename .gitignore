@@ -8,3 +8,10 @@
 /ImageSharp/bin/Release
 /ImageSharp/obj
 /packages
+/TestSkiaApp
+/image.bytes
+/ImageSharp/bin/Debug
+/SkiaSharp/bin/Debug
+/.vs/VSWorkspaceState.json
+/.vs/ImageLibBenchmarks/v15/Server/sqlite3
+/.vs/ImageLibBenchmarks/v15/.suo

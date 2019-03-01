@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Drawing;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace SkiaSharp
 {
@@ -15,6 +19,7 @@ namespace SkiaSharp
         {
             var path = "../../../" + Filename;
             Stream fileStream = File.OpenRead(path); // open a stream to an image file
+
 
             for (int i = 0; i < 25; i++)
             {
@@ -54,10 +59,13 @@ namespace SkiaSharp
 
 						Console.WriteLine($"Before getPixels {watch.ElapsedMilliseconds}");
 
-						byte[] pixelLocation = toBitmap.Bytes;
+						//byte[] pixelLocation = toBitmap.Bytes;
 
-						File.WriteAllBytes(@"../../../image.bytes", pixelLocation);
-						Console.WriteLine($"after write {watch.ElapsedMilliseconds}");
+						//File.WriteAllBytes(@"../../../image.bytes", pixelLocation);
+
+                        var bmp = ToWriteableBitmap(toBitmap);
+
+                        Console.WriteLine($"after write {watch.ElapsedMilliseconds}");
 					}
                 }
 
@@ -68,5 +76,30 @@ namespace SkiaSharp
 
             Console.ReadKey();
         }
+        public static WriteableBitmap ToWriteableBitmap(SKBitmap skiaBitmap)
+        {
+            using (var image = SKImage.FromPixels(skiaBitmap.PeekPixels()))
+            {
+                return ToWriteableBitmap(image);
+            }
+        }
+
+        public static WriteableBitmap ToWriteableBitmap(SKImage skiaImage)
+        {
+            var info = new SKImageInfo(skiaImage.Width, skiaImage.Height);
+            var bitmap = new WriteableBitmap(info.Width, info.Height, 96, 96, PixelFormats.Pbgra32, null);
+            bitmap.Lock();
+
+            // copy
+            using (var pixmap = new SKPixmap(info, bitmap.BackBuffer, bitmap.BackBufferStride))
+            {
+                skiaImage.ReadPixels(pixmap, 0, 0);
+            }
+
+            bitmap.AddDirtyRect(new Int32Rect(0, 0, info.Width, info.Height));
+            bitmap.Unlock();
+            return bitmap;
+        }
     }
+
 }
